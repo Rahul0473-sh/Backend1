@@ -17,6 +17,6 @@ app.use(cookieParser());
 import userRouter from "../src/routes/user.routes.js";
 // now here you app.use because you are making kindda middleware for it
 // in app.get what you were doing was you were  creating router and controller in a single file
-app.use("api/v1/user", userRouter);
+app.use("/api/v1/user", userRouter);
 //http://localhost:1234/api/v1/user/register
 

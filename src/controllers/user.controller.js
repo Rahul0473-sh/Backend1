@@ -18,7 +18,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const avatarLocalpath = req.files.avatar[0].path;
   // const coverLocalpath = req.files[0].coverImage.path;
-  let coverLocalpath="";
+  let coverLocalpath = "";
   if (
     req.files &&
     Array.isArray(req.files.coverImage) &&
@@ -97,8 +97,30 @@ const loginUser = asyncHandler(async (req, res) => {
       )
     );
 });
+const logoutUser = asyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: { refreshToken: undefined },
+    },
+    {
+      new: true, // it will give the new value
+    }
+    // Now i have to clear Cookies
+  );
+  const options = {
+    httponly: true,
+    secure: true,
+  };
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, "User Logout successfully"));
+});
+
 // const registerUser = asyncHandler(async (req, res) => {
 //   res.status(200).json({ message: "ok" });
 // });
 export default registerUser;
-
+export { loginUser, logoutUser };
